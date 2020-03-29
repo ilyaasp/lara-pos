@@ -12,9 +12,14 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect(route('login'));
 });
 
-Route::resource('/kategori', 'CategoriesController')->except([
-    'create', 'show'
-]);
+Auth::routes();
+Route::group(['middleware' => 'auth'], function(){
+    Route::resource('/kategori', 'CategoriesController')->except([
+        'create', 'show'
+    ]);   
+    Route::resource('/produk', 'ProductsController');     
+    Route::get('/home', 'HomeController@index')->name('home');   
+});
